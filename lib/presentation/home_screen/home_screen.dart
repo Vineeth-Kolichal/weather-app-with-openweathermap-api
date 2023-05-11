@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:intl/intl.dart';
 import 'package:weather/core/constants.dart';
 import 'package:weather/presentation/widgets/custom_appbar.dart';
 
@@ -12,6 +13,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    DateFormat formater = DateFormat.yMMMMd();
+    String dateToday = formater.format(today);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: PreferredSize(
@@ -36,7 +40,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          Center(child: Text('11 may,2023')),
+          Center(child: Text(dateToday)),
           kHeight10,
           Padding(
             padding: const EdgeInsets.all(8.0),
