@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WeatherDataFromApi weather = WeatherDataFromApi();
     return SafeArea(
       child: Container(
         child: Column(
@@ -16,9 +17,20 @@ class CustomAppBar extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Weather today',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Weather today',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                  ),
+                  InkWell(
+                      onTap: () async {
+                        await weather.getCurrentWeatherData();
+                        weather.searchtData.value.clear();
+                      },
+                      child: Icon(Icons.refresh))
+                ],
               ),
             ),
             Center(
@@ -26,7 +38,8 @@ class CustomAppBar extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: CupertinoSearchTextField(
                 onChanged: (value) {
-                  getSearchtWeatherData(value);
+                  WeatherDataFromApi weather = WeatherDataFromApi();
+                  weather.getSearchtWeatherData(value);
                 },
                 backgroundColor: Color.fromARGB(218, 104, 128, 150),
                 placeholder: 'Search place',
