@@ -8,10 +8,10 @@ import 'package:weather/domain/weather_data/weather_data.dart';
 import 'package:weather/infrastructure/api_key.dart';
 
 class WeatherDataFromApi extends ChangeNotifier {
-  ValueNotifier<Map<String, dynamic>> currentData = ValueNotifier({});
-  ValueNotifier<Map<String, dynamic>> searchtData = ValueNotifier({});
-  Future<void> getCurrentWeatherData() async {
-    log('message');
+  static ValueNotifier<List<Map<String, dynamic>>> weatherData =
+      ValueNotifier([]);
+  
+  static Future<void> getCurrentWeatherData() async {
     try {
       Dio dio =
           Dio(BaseOptions(baseUrl: 'https://api.openweathermap.org/data/2.5'));
@@ -34,24 +34,26 @@ class WeatherDataFromApi extends ChangeNotifier {
           "clouds": result.clouds,
           "isLoading": false
         };
-        currentData.value.addAll(resultToUi);
-        currentData.notifyListeners();
+        List<Map<String, dynamic>> data = [resultToUi, {}];
+        weatherData.value.addAll(data);
+        weatherData.notifyListeners();
+     
       } else {
         log('else');
 
-        currentData.value.addAll({});
-        currentData.notifyListeners();
+        weatherData.value.addAll([{},{}]);
+        weatherData.notifyListeners();
       }
     } catch (e) {
       print(e);
       log('catch');
 
-      currentData.value.addAll({});
-      currentData.notifyListeners();
+     weatherData.value.addAll([{},{}]);
+        weatherData.notifyListeners();
     }
   }
 
-  Future<void> getSearchtWeatherData(String place) async {
+  static Future<void> getSearchtWeatherData(String place) async {
     try {
       Dio dio =
           Dio(BaseOptions(baseUrl: 'https://api.openweathermap.org/data/2.5'));

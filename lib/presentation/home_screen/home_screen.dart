@@ -14,39 +14,24 @@ import 'widgets/weather_details_item.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  bool isSearchEmpty = true;
-  bool isCurrentEmpty = true;
+ 
   @override
   Widget build(BuildContext context) {
-    WeatherDataFromApi weather = WeatherDataFromApi();
     // weather.getCurrentWeatherData();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await weather.getCurrentWeatherData();
-      isSearchEmpty = weather.searchtData.value.isEmpty;
-      isCurrentEmpty = weather.currentData.value.isEmpty;
+      await WeatherDataFromApi.getCurrentWeatherData();
+     
     });
     DateTime today = DateTime.now();
     DateFormat formater = DateFormat.yMMMMd();
     String dateToday = formater.format(today);
     Size size = MediaQuery.of(context).size;
-    log('$isCurrentEmpty,$isSearchEmpty');
-    if (isCurrentEmpty && isSearchEmpty) {
-      // return Scaffold(
-      //   body: Center(
-      //     child: CircularProgressIndicator(
-      //       strokeWidth: 2,
-      //     ),
-      //   ),
-      // );
-    }
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100), child: CustomAppBar()),
       body: SafeArea(
         child: ShowWeatherData(
-          valueListenable: weather.currentData,
-          weather: weather,
           dateToday: dateToday,
           size: size,
         ),
@@ -58,20 +43,17 @@ class HomeScreen extends StatelessWidget {
 class ShowWeatherData extends StatelessWidget {
   const ShowWeatherData({
     super.key,
-    required this.weather,
     required this.dateToday,
     required this.size,
-    required this.valueListenable,
   });
-  final ValueNotifier<Map<String, dynamic>> valueListenable;
-  final WeatherDataFromApi weather;
+
   final String dateToday;
   final Size size;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-      valueListenable: valueListenable,
+      valueListenable: WeatherDataFromApi.weatherData,
       builder: (context, data, _) {
         int temp = 0;
         int pressure = 0;
@@ -86,11 +68,11 @@ class ShowWeatherData extends StatelessWidget {
             size: 60.0,
           ));
         } else {
-          temp = ((data['main'].temp) - 273.15).round();
-          pressure = (data['main'].pressure).round();
-          humidity = (data['main'].humidity).round();
-          windSpeed = (data['wind'].speed);
-          cloud = (data['clouds'].all).round();
+          temp = ((data[0]['main'].temp) - 273.15).round();
+          pressure = (data[0]['main'].pressure).round();
+          humidity = (data[0]['main'].humidity).round();
+          windSpeed = (data[0]['wind'].speed);
+          cloud = (data[0]['clouds'].all).round();
           return ListView(
             children: [
               const SizedBox(
@@ -104,7 +86,7 @@ class ShowWeatherData extends StatelessWidget {
                     color: Colors.red,
                   ),
                   Text(
-                    data['name'] ?? 'Place',
+                    data[0]['name'] ?? 'Place',
                     style: const TextStyle(fontSize: 30),
                   ),
                 ],

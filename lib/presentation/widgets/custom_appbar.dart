@@ -26,8 +26,8 @@ class CustomAppBar extends StatelessWidget {
                   ),
                   InkWell(
                       onTap: () async {
-                        await weather.getCurrentWeatherData();
-                        weather.searchtData.value.clear();
+                        await WeatherDataFromApi.getCurrentWeatherData();
+                        WeatherDataFromApi.weatherData.value[1].clear();
                       },
                       child: Icon(Icons.refresh))
                 ],
@@ -39,7 +39,7 @@ class CustomAppBar extends StatelessWidget {
               child: CupertinoSearchTextField(
                 onChanged: (value) {
                   WeatherDataFromApi weather = WeatherDataFromApi();
-                  weather.getSearchtWeatherData(value);
+                  WeatherDataFromApi.getSearchtWeatherData(value);
                 },
                 backgroundColor: Color.fromARGB(218, 104, 128, 150),
                 placeholder: 'Search place',
