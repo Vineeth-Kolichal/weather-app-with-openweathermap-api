@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:weather/infrastructure/home_screen/home_screen_implementation.dart';
 
 class CustomAppBar extends StatelessWidget {
   const CustomAppBar({super.key});
@@ -24,6 +25,9 @@ class CustomAppBar extends StatelessWidget {
                 child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CupertinoSearchTextField(
+                onChanged: (value) {
+                  getSearchtWeatherData(value);
+                },
                 backgroundColor: Color.fromARGB(218, 104, 128, 150),
                 placeholder: 'Search place',
                 placeholderStyle:
