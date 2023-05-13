@@ -25,8 +25,8 @@ class HomeScreen extends StatelessWidget {
     String dateToday = formater.format(today);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: Size.fromHeight(100), child: CustomAppBar()),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(105), child: CustomAppBar()),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -62,6 +62,8 @@ class ShowWeatherData extends StatelessWidget {
         int humidity = 0;
         double windSpeed = 0;
         int cloud = 0;
+        double lat = 0;
+        double long = 0;
         if (data.isEmpty || (data[0].isEmpty && data[1].isEmpty)) {
           return const Center(
             child: SpinKitWave(
@@ -80,6 +82,8 @@ class ShowWeatherData extends StatelessWidget {
           humidity = (data[i]['main'].humidity).round();
           windSpeed = (data[i]['wind'].speed);
           cloud = (data[i]['clouds'].all).round();
+          lat = data[i]['coord'].lat;
+          long = data[i]['coord'].lon;
           return ListView(
             children: [
               const SizedBox(
@@ -160,7 +164,57 @@ class ShowWeatherData extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+              kHeight10,
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: GridView.count(
+                  childAspectRatio: 2.5,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(218, 104, 128, 150),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 0.5, color: Colors.grey),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text('Latitude',
+                                  style: TextStyle(fontSize: 20)),
+                              Text('$lat',
+                                  style: const TextStyle(fontSize: 17)),
+                            ]),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(218, 104, 128, 150),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 0.5, color: Colors.grey),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text('Longitude',
+                                  style: TextStyle(fontSize: 20)),
+                              Text('$long',
+                                  style: const TextStyle(fontSize: 17)),
+                            ]),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              kHeight10
             ],
           );
         }

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/core/location/get_locaton.dart';
-import 'package:weather/domain/weather_data/weather_data.dart';
+import 'package:weather/domain/home_screen/weather_data.dart';
 import 'package:weather/infrastructure/api_key.dart';
 
 class WeatherDataFromApi extends ChangeNotifier {

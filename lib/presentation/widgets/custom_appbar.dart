@@ -1,11 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:weather/infrastructure/home_screen/home_screen_implementation.dart';
 
 class CustomAppBar extends StatelessWidget {
-  CustomAppBar({super.key});
+  const CustomAppBar({super.key});
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -23,6 +21,8 @@ class CustomAppBar extends StatelessWidget {
               child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CupertinoSearchTextField(
+              style: const TextStyle(color: Colors.white),
+              itemColor: Colors.white,
               onSubmitted: (value) async {
                 if (value.isEmpty) {
                   await WeatherDataFromApi.getCurrentWeatherData();
