@@ -28,9 +28,14 @@ class HomeScreen extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(100), child: CustomAppBar()),
       body: SafeArea(
-        child: ShowWeatherData(
-          dateToday: dateToday,
-          size: size,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await WeatherDataFromApi.getCurrentWeatherData();
+          },
+          child: ShowWeatherData(
+            dateToday: dateToday,
+            size: size,
+          ),
         ),
       ),
     );
@@ -85,7 +90,6 @@ class ShowWeatherData extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.location_on,
-                    color: Colors.red,
                   ),
                   Text(
                     data[i]['name'] ?? 'Place',

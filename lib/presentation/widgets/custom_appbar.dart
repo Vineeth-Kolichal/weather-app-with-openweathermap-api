@@ -12,22 +12,11 @@ class CustomAppBar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Weather today',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-                ),
-                InkWell(
-                    onTap: () async {
-                      await WeatherDataFromApi.getCurrentWeatherData();
-                      WeatherDataFromApi.weatherData.value[1].clear();
-                    },
-                    child: const Icon(Icons.refresh))
-              ],
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Weather today',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
             ),
           ),
           Center(
