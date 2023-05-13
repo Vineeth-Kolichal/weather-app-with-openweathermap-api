@@ -10,7 +10,7 @@ import 'package:weather/infrastructure/api_key.dart';
 class WeatherDataFromApi extends ChangeNotifier {
   static ValueNotifier<List<Map<String, dynamic>>> weatherData =
       ValueNotifier([]);
-  
+
   static Future<void> getCurrentWeatherData() async {
     try {
       Dio dio =
@@ -32,24 +32,22 @@ class WeatherDataFromApi extends ChangeNotifier {
           "name": result.name,
           "wind": result.wind,
           "clouds": result.clouds,
-          "isLoading": false
         };
         List<Map<String, dynamic>> data = [resultToUi, {}];
+        weatherData.value.clear();
         weatherData.value.addAll(data);
         weatherData.notifyListeners();
-     
       } else {
         log('else');
-
-        weatherData.value.addAll([{},{}]);
+        weatherData.value.clear();
+        weatherData.value.addAll([{}, {}]);
         weatherData.notifyListeners();
       }
     } catch (e) {
-      print(e);
       log('catch');
-
-     weatherData.value.addAll([{},{}]);
-        weatherData.notifyListeners();
+      weatherData.value.clear();
+      weatherData.value.addAll([{}, {}]);
+      weatherData.notifyListeners();
     }
   }
 
@@ -70,31 +68,21 @@ class WeatherDataFromApi extends ChangeNotifier {
           "name": result.name,
           "wind": result.wind,
           "clouds": result.clouds,
-          "isLoading": false
         };
-        print(result.name);
+        List<Map<String, dynamic>> data = [{}, resultToUi];
+        print(data);
+        weatherData.value.clear();
+        weatherData.value.addAll(data);
+        weatherData.notifyListeners();
       } else {
-        log('else');
-        Map<String, dynamic> data = {
-          "main": null,
-          "coord": null,
-          "name": null,
-          "wind": null,
-          "clouds": null,
-          "isLoading": true
-        };
+        weatherData.value.clear();
+        weatherData.value.addAll([{}, {}]);
+        weatherData.notifyListeners();
       }
     } catch (e) {
-      print(e);
-      log('catch');
-      Map<String, dynamic> data = {
-        "main": null,
-        "coord": null,
-        "name": null,
-        "wind": null,
-        "clouds": null,
-        "isLoading": true
-      };
+      weatherData.value.clear();
+      weatherData.value.addAll([{}, {}]);
+      weatherData.notifyListeners();
     }
   }
 }

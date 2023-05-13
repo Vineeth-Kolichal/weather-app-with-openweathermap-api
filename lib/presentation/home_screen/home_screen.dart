@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/core/constants.dart';
@@ -13,22 +11,21 @@ import 'package:weather/presentation/widgets/custom_appbar.dart';
 import 'widgets/weather_details_item.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
- 
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    // weather.getCurrentWeatherData();
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await WeatherDataFromApi.getCurrentWeatherData();
-     
+      if (WeatherDataFromApi.weatherData.value.isEmpty) {
+        await WeatherDataFromApi.getCurrentWeatherData();
+      }
     });
     DateTime today = DateTime.now();
     DateFormat formater = DateFormat.yMMMMd();
     String dateToday = formater.format(today);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: const PreferredSize(
+      appBar: PreferredSize(
           preferredSize: Size.fromHeight(100), child: CustomAppBar()),
       body: SafeArea(
         child: ShowWeatherData(
@@ -60,19 +57,24 @@ class ShowWeatherData extends StatelessWidget {
         int humidity = 0;
         double windSpeed = 0;
         int cloud = 0;
-        // bool isLoading = data['isLoading'];
-        if (data.isEmpty) {
+        if (data.isEmpty || (data[0].isEmpty && data[1].isEmpty)) {
           return const Center(
-              child: SpinKitWave(
-            color: Colors.white,
-            size: 60.0,
-          ));
+            child: SpinKitWave(
+              color: Colors.white,
+              size: 60.0,
+            ),
+          );
         } else {
-          temp = ((data[0]['main'].temp) - 273.15).round();
-          pressure = (data[0]['main'].pressure).round();
-          humidity = (data[0]['main'].humidity).round();
-          windSpeed = (data[0]['wind'].speed);
-          cloud = (data[0]['clouds'].all).round();
+          log('$data');
+          int i = 0;
+          if (data[1].isNotEmpty) {
+            i = 1;
+          }
+          temp = ((data[i]['main'].temp) - 273.15).round();
+          pressure = (data[i]['main'].pressure).round();
+          humidity = (data[i]['main'].humidity).round();
+          windSpeed = (data[i]['wind'].speed);
+          cloud = (data[i]['clouds'].all).round();
           return ListView(
             children: [
               const SizedBox(
@@ -86,7 +88,7 @@ class ShowWeatherData extends StatelessWidget {
                     color: Colors.red,
                   ),
                   Text(
-                    data[0]['name'] ?? 'Place',
+                    data[i]['name'] ?? 'Place',
                     style: const TextStyle(fontSize: 30),
                   ),
                 ],
